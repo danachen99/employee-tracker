@@ -72,11 +72,17 @@ const viewEmployees = () => {
 const viewByDepartment = () => {
     inquirer
         .prompt({
-            name: "",
-            type: "",
-            message: "",
-            choices: []
+            name: "department",
+            type: "rawlist",
+            message: "Which department would you like to view?",
+            choices: ["Sales", "Engineering", "Finance", "Legal"]
         }).then((res) => {
-
-        })
+            const query = "SELECT employee.first_name, employee.last_name, employee_role.title FROM employee_role JOIN employee ON employee_role.id = employee.role_id WHERE employee_role.title = ?;"
+            connection.query(query, [res.department], (err, res) => {
+                for (let i = 0; i < res.length; i++) {
+                    console.log(`${res[i].title} | ${res[i].first_name} ${res[i].last_name}`);
+                }
+            });
+            runSearch();
+        });
 }
