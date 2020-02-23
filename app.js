@@ -27,6 +27,7 @@ const init = () => {
         for (let i = 0; i < res.length; i++) {
             employees.push(res[i]);
         }
+        console.log(employees);
     });
 
     connection.query("SELECT * FROM department", (err, res) => {
@@ -41,6 +42,7 @@ const init = () => {
         for (let i = 0; i < res.length; i++) {
             roles.push(res[i]);
         }
+        // console.log(roles);
     });
 
     runSearch();
@@ -58,9 +60,9 @@ const runSearch = () => {
                 "View All Positions",
                 "View All Employees By Department",
                 "Add Employee",
+                "Update Employee Role",
                 "View All Employees By Manager",
                 "Remove Employee",
-                "Update Employee Role",
                 "Update Employee Manager"
             ]
         })
@@ -102,24 +104,16 @@ const viewEmployees = () => {
     const query = "SELECT employee.*, employee_role.title FROM employee JOIN employee_role ON employee.role_id = employee_role.id";
     connection.query(query, (err, res) => {
         if (err) throw err;
-        // for (let i = 0; i < res.length; i++) {
-        //     console.log(`${res[i].id}. ${res[i].first_name} ${res[i].last_name} | Role: Manager`);
-        // }
-        // for (let i = 0; i < res.length; i++) {
-        //     employees.push(res[i]);
-        // }
         console.table("\n", res);
     });
     runSearch();
 }
 
+//view ALL departments
 const viewDepartments = () => {
     const query = "SELECT * FROM department";
     connection.query(query, (err, res) => {
         if (err) throw err;
-        // for (let i = 0; i < res.length; i++) {
-        //     departments.push(res[i]);
-        // }
         console.table("\n", res);
     });
     runSearch();
@@ -129,16 +123,13 @@ const viewPositions = () => {
     const query = "SELECT * FROM employee_role";
     connection.query(query, (err, res) => {
         if (err) throw err;
-        // for (let i = 0; i < res.length; i++) {
-        //     roles.push(res[i]);
-        // }
         console.table("\n", res);
     });
     runSearch();
 }
 
 
-//view by department
+//view EMPLOYEES by their department
 const viewByDepartment = () => {
     inquirer
         .prompt({
@@ -155,7 +146,8 @@ const viewByDepartment = () => {
         });
 }
 
-//
+
+//add employee
 const addEmployee = () => {
     inquirer
         .prompt({
@@ -171,22 +163,27 @@ const addEmployee = () => {
             name: "title",
             message: "What is the employee's role title?",
             choices: roles
-        }, {
-            type: "input",
-            name: "last_name",
-            message: "Who is the employee's manager?",
-            choices: ["", "None"]
+                // }, {
+                //     type: "input",
+                //     name: "last_name",
+                //     message: "Who is the employee's manager?",
+                //     choices: ["", "None"]
         }).then(res => {
-            const query = ""
+            const query = "INSERT INTO employee (first_name, last_name, role_id) VALUES (?, ?, ?)";
+            connection.query(query, [res.first_name, res.last_name, res.title], (err, res) => {
+                console.table(res);
+            });
+            // init();
         });
 }
 
 
 const updateRole = () => {
     inquirer.prompt({
-        type: "input",
+        type: "rawlist",
         name: "id",
-        message: "Which employee's role would you like to update by ID?"
+        message: "Which employee's role would you like to update by ID?",
+        choices: employees
     }, {
         type: "rawlist",
         name: "update",
