@@ -2,9 +2,6 @@ const mysql = require("mysql");
 const inquirer = require("inquirer");
 const cTable = require('console.table');
 
-// const departments = ["Sales", "Engineering", "Finance", "Legal"];
-// const roles = ["Sales Lead", "Salesperson", "Lead Engineer", "Software Engineer", "Account Manager", "Accountant", "Legal Team Lead"];
-
 let employees = [];
 let departments = [];
 let roles = [];
@@ -46,11 +43,11 @@ const init = () => {
         }
     });
 
-    views();
+    runSearch();
 }
 
 //contains all prompts for the user with switch cases
-const views = () => {
+const runSearch = () => {
     inquirer
         .prompt({
             name: "action",
@@ -111,9 +108,9 @@ const viewEmployees = () => {
         // for (let i = 0; i < res.length; i++) {
         //     employees.push(res[i]);
         // }
-        console.table(res);
+        console.table("\n", res);
     });
-    views();
+    runSearch();
 }
 
 const viewDepartments = () => {
@@ -125,7 +122,7 @@ const viewDepartments = () => {
         // }
         console.table("\n", res);
     });
-    views();
+    runSearch();
 }
 
 const viewPositions = () => {
@@ -137,15 +134,11 @@ const viewPositions = () => {
         // }
         console.table("\n", res);
     });
-    views();
+    runSearch();
 }
 
 
-
-// "View All Employees By Department",
-// 
-
-//view by department, shows only first name, last name, and role 
+//view by department
 const viewByDepartment = () => {
     inquirer
         .prompt({
@@ -154,19 +147,12 @@ const viewByDepartment = () => {
             message: "Which department would you like to view?",
             choices: departments
         }).then((res) => {
-            const query = "SELECT employee.first_name, employee.last_name, employee_role.title FROM employee_role JOIN employee ON employee_role.id = employee.role_id WHERE employee_role.title = ?;"
+            const query = "SELECT department.name AS department, employee.first_name, employee.last_name, employee_role.title FROM employee_role JOIN employee ON employee_role.id = employee.role_id JOIN department ON department.id = employee_role.department_id WHERE department.name = ?;"
             connection.query(query, [res.department], (err, res) => {
-                for (let i = 0; i < res.length; i++) {
-                    console.log(`${res[i].title} | ${res[i].first_name} ${res[i].last_name}`);
-                }
+                console.table("\n", res);
             });
             runSearch();
         });
-}
-
-//bonus
-const viewByManager = () => {
-
 }
 
 //
@@ -195,16 +181,6 @@ const addEmployee = () => {
         });
 }
 
-//bonus
-const removeEmployee = () => {
-    inquirer.prompt({
-        type: "input",
-        name: "delete",
-        message: "Which employee would you like to remove?"
-    }).then(res => {
-
-    });
-}
 
 const updateRole = () => {
     inquirer.prompt({
@@ -251,5 +227,20 @@ const updateRole = () => {
 
 //bonus
 const updateManager = () => {
+
+}
+
+//bonus
+const removeEmployee = () => {
+        inquirer.prompt({
+            type: "input",
+            name: "delete",
+            message: "Which employee would you like to remove?"
+        }).then(res => {
+
+        });
+    }
+    //bonus
+const viewByManager = () => {
 
 }
