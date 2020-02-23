@@ -20,10 +20,37 @@ const connection = mysql.createConnection({
 //create connection and call the first inquirer function
 connection.connect((err) => {
     if (err) throw err;
-    runSearch();
+    init();
 });
 
-const runSearch = () => {
+//will populate all arrays with objects from the tables to be accessed later
+const init = () => {
+    connection.query("SELECT * FROM employee", (err, res) => {
+        if (err) throw err;
+        for (let i = 0; i < res.length; i++) {
+            employees.push(res[i]);
+        }
+    });
+
+    connection.query("SELECT * FROM department", (err, res) => {
+        if (err) throw err;
+        for (let i = 0; i < res.length; i++) {
+            departments.push(res[i]);
+        }
+    });
+
+    connection.query("SELECT * FROM employee_role", (err, res) => {
+        if (err) throw err;
+        for (let i = 0; i < res.length; i++) {
+            roles.push(res[i]);
+        }
+    });
+
+    views();
+}
+
+//contains all prompts for the user with switch cases
+const views = () => {
     inquirer
         .prompt({
             name: "action",
@@ -81,31 +108,42 @@ const viewEmployees = () => {
         // for (let i = 0; i < res.length; i++) {
         //     console.log(`${res[i].id}. ${res[i].first_name} ${res[i].last_name} | Role: Manager`);
         // }
-        for (let i = 0; i < res.length; i++) {
-            employees.push(res[i]);
-        }
+        // for (let i = 0; i < res.length; i++) {
+        //     employees.push(res[i]);
+        // }
         console.table(res);
-        runSearch();
-    })
+    });
+    views();
 }
 
 const viewDepartments = () => {
     const query = "SELECT * FROM department";
     connection.query(query, (err, res) => {
         if (err) throw err;
+        // for (let i = 0; i < res.length; i++) {
+        //     departments.push(res[i]);
+        // }
         console.table("\n", res);
     });
-    runSearch();
+    views();
 }
 
 const viewPositions = () => {
     const query = "SELECT * FROM employee_role";
     connection.query(query, (err, res) => {
         if (err) throw err;
+        // for (let i = 0; i < res.length; i++) {
+        //     roles.push(res[i]);
+        // }
         console.table("\n", res);
     });
-    runSearch();
+    views();
 }
+
+
+
+// "View All Employees By Department",
+// 
 
 //view by department, shows only first name, last name, and role 
 const viewByDepartment = () => {
