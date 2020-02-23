@@ -88,13 +88,18 @@ const viewDepartments = () => {
     const query = "SELECT * FROM department";
     connection.query(query, (err, res) => {
         if (err) throw err;
-        console.table(res);
+        console.table("\n", res);
     });
     runSearch();
 }
 
 const viewPositions = () => {
-
+    const query = "SELECT * FROM employee_role";
+    connection.query(query, (err, res) => {
+        if (err) throw err;
+        console.table("\n", res);
+    });
+    runSearch();
 }
 
 //view by department, shows only first name, last name, and role 
