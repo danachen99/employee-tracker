@@ -1,12 +1,14 @@
+-- Initial departments
 INSERT INTO department (name)
-VALUES ("Engineering"),("Sales"), ("Finance"), ("Human Resources");
+VALUES ("Engineering"),("Sales"), ("Finance"), ("Legal");
 
+-- Initial Roles 
 INSERT INTO employee_role (title, salary, department_id)
-VALUES ("Engineering", 75000, 1), ("Sales", 40000, 2), 
-("Finance", 50000, 3), ("Human Resources", 48000, 4);
+VALUES ("Lead Engineer", 90000, 1), ("Software Engineer", 85000, 1),
+("Sales Lead", 45000, 2), ("Salesperson", 40000, 2),
+("Accountant", 50000, 3), ("Account Manager", 55000, 3), 
+("Legal Team Lead", 60000, 4);
 
+-- Initial Employees
 INSERT INTO employee (first_name, last_name, role_id, manager_id)
-VALUES ("Emily","Rhodes", 2, 5); 
-
-INSERT INTO employee (first_name, last_name, role_id)
-VALUES ("Christina","Park", 3), ("Andy","Perkins", 2);
+VALUES ("Emily","Rhodes", 2, 5),("Christina","Park", 3, NULL), ("Andy","Perkins", 2, NULL);
