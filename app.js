@@ -32,8 +32,8 @@ const runSearch = () => {
                 "View All Departments",
                 "View All Positions",
                 "View All Employees By Department",
-                "View All Employees By Manager",
                 "Add Employee",
+                "View All Employees By Manager",
                 "Remove Employee",
                 "Update Employee Role",
                 "Update Employee Manager"
@@ -73,13 +73,13 @@ const runSearch = () => {
 }
 
 //view all employees... join employee and employee role tables
-//id, first, last, title, department, salary, manager
 const viewEmployees = () => {
-    const query = "SELECT * FROM employee";
+    const query = "SELECT employee.*, employee_role.title FROM employee JOIN employee_role ON employee.role_id = employee_role.id";
     connection.query(query, (err, res) => {
-        for (let i = 0; i < res.length; i++) {
-            console.log(`${res[i].id}. ${res[i].first_name} ${res[i].last_name} | Role: Manager`);
-        }
+        // for (let i = 0; i < res.length; i++) {
+        //     console.log(`${res[i].id}. ${res[i].first_name} ${res[i].last_name} | Role: Manager`);
+        // }
+        console.table(res);
         runSearch();
     })
 }
