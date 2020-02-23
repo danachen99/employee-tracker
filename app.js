@@ -5,8 +5,9 @@ const cTable = require('console.table');
 // const departments = ["Sales", "Engineering", "Finance", "Legal"];
 // const roles = ["Sales Lead", "Salesperson", "Lead Engineer", "Software Engineer", "Account Manager", "Accountant", "Legal Team Lead"];
 
-const departments = []
-const roles = [];
+let employees = [];
+let departments = [];
+let roles = [];
 
 const connection = mysql.createConnection({
     host: "localhost",
@@ -76,9 +77,13 @@ const runSearch = () => {
 const viewEmployees = () => {
     const query = "SELECT employee.*, employee_role.title FROM employee JOIN employee_role ON employee.role_id = employee_role.id";
     connection.query(query, (err, res) => {
+        if (err) throw err;
         // for (let i = 0; i < res.length; i++) {
         //     console.log(`${res[i].id}. ${res[i].first_name} ${res[i].last_name} | Role: Manager`);
         // }
+        for (let i = 0; i < res.length; i++) {
+            employees.push(res[i]);
+        }
         console.table(res);
         runSearch();
     })
