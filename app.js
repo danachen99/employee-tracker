@@ -210,51 +210,6 @@ const addEmployeeWithManager = (res, roleID) => {
         });
 }
 
-// const addEmployee = () => {
-//     inquirer
-//         .prompt([{
-//             type: "input",
-//             name: "first_name",
-//             message: "What is the employee's first name?"
-//         }, {
-//             type: "input",
-//             name: "last_name",
-//             message: "What is the employee's last name?"
-//         }, {
-//             type: "rawlist",
-//             name: "title",
-//             message: "What is the employee's role title?",
-//             choices: roleTitles
-//         }, {
-//             type: "confirm",
-//             name: "manager",
-//             message: "Does this employee have a manager?"
-//         }]).then(res => {
-//             const roleID = roleTitles.indexOf(res.title) + 1;
-//             if (res.manager) {
-//                 inquirer
-//                     .prompt({
-//                         type: "rawlist",
-//                         name: "manager_id",
-//                         message: "Who is the manager?",
-//                         choices: employeeNames
-//                     }).then(result => {
-//                         let employeeID = employeeNames.indexOf(result.manager_id) + 1;
-//                         connection.query(`INSERT INTO employee (first_name, last_name, role_id) VALUES ("${res.first_name}", "${res.last_name}", ${roleID}, ${employeeID})`, (err, res) => {
-//                             if (err) throw err;
-//                             console.log(`Your employee has been added!`);
-//                         });
-//                     });
-//             } else {
-//                 connection.query(`INSERT INTO employee (first_name, last_name, role_id) VALUES ("${res.first_name}", "${res.last_name}", ${roleID})`, (err, res) => {
-//                     if (err) throw err;
-//                     console.log(`Your employee has been added!`);
-//                 });
-//             }
-//             // init();
-//         });
-// }
-
 //add department
 const addDepartment = () => {
     inquirer
