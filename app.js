@@ -2,13 +2,15 @@ const mysql = require("mysql");
 const inquirer = require("inquirer");
 const cTable = require('console.table');
 
+//arrays of objects from SQL queries  
 let employees = [];
-let employeeNames = [];
 let departments = [];
-let departmentNames = [];
 let roles = [];
-let roleTitles = [];
 
+//will contain specific values from one key that will be used for user prompts
+let employeeNames = [];
+let departmentNames = [];
+let roleTitles = [];
 
 const connection = mysql.createConnection({
     host: "localhost",
@@ -24,7 +26,7 @@ connection.connect((err) => {
     init();
 });
 
-//will populate all arrays with objects from the tables to be accessed later
+//populate all arrays with objects from the tables to be accessed later
 const init = () => {
     connection.query("SELECT * FROM employee", (err, res) => {
         if (err) throw err;
@@ -103,7 +105,7 @@ const runSearch = () => {
         })
 }
 
-//view all employees... join employee and employee role tables
+//view all employees
 const viewEmployees = () => {
     const query = "SELECT employee.*, employee_role.title FROM employee JOIN employee_role ON employee.role_id = employee_role.id";
     connection.query(query, (err, res) => {
@@ -123,6 +125,7 @@ const viewDepartments = () => {
     runSearch();
 }
 
+//view ALL positions
 const viewPositions = () => {
     const query = "SELECT * FROM employee_role";
     connection.query(query, (err, res) => {
@@ -186,6 +189,7 @@ const addEmployee = () => {
         });
 }
 
+//add department
 const addDepartment = () => {
     inquirer
         .prompt({
@@ -202,6 +206,7 @@ const addDepartment = () => {
         });
 }
 
+//add role by selecting which department to add to first
 const addRole = () => {
     inquirer
         .prompt([{
@@ -228,6 +233,7 @@ const addRole = () => {
         });
 }
 
+//update an employee's role/title by selecting from list of employees
 const updateRole = () => {
     inquirer.prompt([{
         type: "rawlist",
