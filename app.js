@@ -3,8 +3,12 @@ const inquirer = require("inquirer");
 const cTable = require('console.table');
 
 let employees = [];
+let employeeNames = [];
 let departments = [];
+let departmentNames = [];
 let roles = [];
+let roleTitles = [];
+
 
 const connection = mysql.createConnection({
     host: "localhost",
@@ -27,7 +31,8 @@ const init = () => {
         for (let i = 0; i < res.length; i++) {
             employees.push(res[i]);
         }
-        console.log(employees);
+        // console.log(employees);
+
     });
 
     connection.query("SELECT * FROM department", (err, res) => {
@@ -42,7 +47,9 @@ const init = () => {
         for (let i = 0; i < res.length; i++) {
             roles.push(res[i]);
         }
-        // console.log(roles);
+        // roles.forEach((role) => console.log(`${role.title}`));
+        roles.forEach((role) => roleTitles.push(role.title));
+
     });
 
     runSearch();
@@ -60,6 +67,8 @@ const runSearch = () => {
                 "View All Positions",
                 "View All Employees By Department",
                 "Add Employee",
+                "Add Department",
+                "Add Role/Position",
                 "Update Employee Role",
                 "View All Employees By Manager",
                 "Remove Employee",
@@ -85,6 +94,12 @@ const runSearch = () => {
                     break;
                 case "Add Employee":
                     addEmployee();
+                    break;
+                case "Add Department":
+                    addDepartment();
+                    break;
+                case "Add Role/Position":
+                    addRole();
                     break;
                 case "Remove Employee":
                     removeEmployee();
@@ -150,31 +165,46 @@ const viewByDepartment = () => {
 //add employee
 const addEmployee = () => {
     inquirer
-        .prompt({
-            type: "input",
-            name: "first_name",
-            message: "What is the employee's first name?"
-        }, {
-            type: "input",
-            name: "last_name",
-            message: "What is the employee's last name?"
-        }, {
-            type: "rawlist",
-            name: "title",
-            message: "What is the employee's role title?",
-            choices: roles
-                // }, {
-                //     type: "input",
-                //     name: "last_name",
-                //     message: "Who is the employee's manager?",
-                //     choices: ["", "None"]
-        }).then(res => {
-            const query = "INSERT INTO employee (first_name, last_name, role_id) VALUES (?, ?, ?)";
-            connection.query(query, [res.first_name, res.last_name, res.title], (err, res) => {
-                console.table(res);
+        .prompt([{
+                type: "input",
+                name: "first_name",
+                message: "What is the employee's first name?"
+            }, {
+                type: "input",
+                name: "last_name",
+                message: "What is the employee's last name?"
+            }, {
+                type: "rawlist",
+                name: "title",
+                message: "What is the employee's role title?",
+                choices: roleTitles
+            }
+            // {
+            //     type: "input",
+            //     name: "last_name",
+            //     message: "Who is the employee's manager ID?"
+            //         // default: null
+            // }
+        ]).then(res => {
+            // const query = "INSERT INTO employee (first_name, last_name, role_id) VALUES (?, ?, ?)";
+            // connection.query(query, [res.first_name, res.last_name, res.title], (err, res) => {
+            //     if (err) throw err;
+            //     console.log(`Your employee has been added! ${res.first_name} ${res.last_name} ${res.title}`);
+            //     // console.table(res);
+            // });
+            const roleID = roleTitles.indexOf(res.title) + 1;
+            console.log(roleID)
+            connection.query(`INSERT INTO employee (first_name, last_name, role_id) VALUES ("${res.first_name}", "${res.last_name}", ${roleID})`, (err, res) => {
+                if (err) throw err;
+                console.log(`Your employee has been added! ${res.first_name} ${res.last_name} ${res.title}`);
+                // console.table(res);
             });
-            // init();
+            init();
         });
+}
+
+const addDepartment = () => {
+
 }
 
 
