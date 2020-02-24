@@ -73,6 +73,7 @@ const runSearch = () => {
                 "Add Department",
                 "Add Role/Position",
                 "Update Employee Role",
+                "Exit"
             ]
         })
         .then((res) => {
@@ -101,6 +102,10 @@ const runSearch = () => {
                 case "Update Employee Role":
                     updateRole();
                     break;
+                case "Update Employee Role":
+                    connection.end();
+                    console.log("Goodbye")
+                    return;
             }
         })
 }
@@ -158,36 +163,97 @@ const viewByDepartment = () => {
 const addEmployee = () => {
     inquirer
         .prompt([{
-                type: "input",
-                name: "first_name",
-                message: "What is the employee's first name?"
-            }, {
-                type: "input",
-                name: "last_name",
-                message: "What is the employee's last name?"
-            }, {
-                type: "rawlist",
-                name: "title",
-                message: "What is the employee's role title?",
-                choices: roleTitles
-            }
-            // {
-            //     type: "input",
-            //     name: "last_name",
-            //     message: "Who is the employee's manager ID?"
-            //         // default: null
-            // }
-        ]).then(res => {
+            type: "input",
+            name: "first_name",
+            message: "What is the employee's first name?"
+        }, {
+            type: "input",
+            name: "last_name",
+            message: "What is the employee's last name?"
+        }, {
+            type: "rawlist",
+            name: "title",
+            message: "What is the employee's role title?",
+            choices: roleTitles
+        }, {
+            type: "confirm",
+            name: "manager",
+            message: "Does this employee have a manager?"
+        }]).then(res => {
             const roleID = roleTitles.indexOf(res.title) + 1;
-            console.log(roleID)
-            connection.query(`INSERT INTO employee (first_name, last_name, role_id) VALUES ("${res.first_name}", "${res.last_name}", ${roleID})`, (err, res) => {
-                if (err) throw err;
-                console.log(`Your employee has been added!`);
-                // console.table(res);
-            });
-            init();
+            if (res.manager) {
+                addEmployeeWithManager(res, roleID);
+            } else {
+                connection.query(`INSERT INTO employee (first_name, last_name, role_id) VALUES ("${res.first_name}", "${res.last_name}", ${roleID})`, (err, res) => {
+                    if (err) throw err;
+                    console.log(`Your employee has been added!`);
+                });
+            }
+            // init();
         });
 }
+
+//prompt user for manager during adding 
+const addEmployeeWithManager = (res, roleID) => {
+    inquirer
+        .prompt({
+            type: "rawlist",
+            name: "manager_id",
+            message: "Who is the manager?",
+            choices: employeeNames
+        }).then(result => {
+            let employeeID = employeeNames.indexOf(result.manager_id) + 1;
+            connection.query(`INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES ("${res.first_name}", "${res.last_name}", ${roleID}, ${employeeID})`, (err, res) => {
+                if (err) throw err;
+                console.log(`Your employee has been added!`);
+            });
+        });
+}
+
+// const addEmployee = () => {
+//     inquirer
+//         .prompt([{
+//             type: "input",
+//             name: "first_name",
+//             message: "What is the employee's first name?"
+//         }, {
+//             type: "input",
+//             name: "last_name",
+//             message: "What is the employee's last name?"
+//         }, {
+//             type: "rawlist",
+//             name: "title",
+//             message: "What is the employee's role title?",
+//             choices: roleTitles
+//         }, {
+//             type: "confirm",
+//             name: "manager",
+//             message: "Does this employee have a manager?"
+//         }]).then(res => {
+//             const roleID = roleTitles.indexOf(res.title) + 1;
+//             if (res.manager) {
+//                 inquirer
+//                     .prompt({
+//                         type: "rawlist",
+//                         name: "manager_id",
+//                         message: "Who is the manager?",
+//                         choices: employeeNames
+//                     }).then(result => {
+//                         let employeeID = employeeNames.indexOf(result.manager_id) + 1;
+//                         connection.query(`INSERT INTO employee (first_name, last_name, role_id) VALUES ("${res.first_name}", "${res.last_name}", ${roleID}, ${employeeID})`, (err, res) => {
+//                             if (err) throw err;
+//                             console.log(`Your employee has been added!`);
+//                         });
+//                     });
+//             } else {
+//                 connection.query(`INSERT INTO employee (first_name, last_name, role_id) VALUES ("${res.first_name}", "${res.last_name}", ${roleID})`, (err, res) => {
+//                     if (err) throw err;
+//                     console.log(`Your employee has been added!`);
+//                 });
+//             }
+//             // init();
+//         });
+// }
 
 //add department
 const addDepartment = () => {
