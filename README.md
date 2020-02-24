@@ -12,4 +12,11 @@ I want to be able to view and manage the departments, roles, and employees in my
 So that I can organize and plan my business
 
 ## Tools
-JavaScript, Node.js, MySQL
+JavaScript, Node.js (Inquirer & MySQL modules), MySQL
+
+## Images
+![Employee Tracker 1](./images/img0)
+
+![Employee Tracker 2](./images/img1)
+
+![Employee Tracker 3](./images/img2)
