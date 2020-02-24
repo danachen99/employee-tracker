@@ -26,10 +26,3 @@ CREATE TABLE employee (
     manager_id INT NULL,
     PRIMARY KEY (id)
 );
-
-CREATE TABLE manager (
-	id INT NOT NULL AUTO_INCREMENT,
-    first_name VARCHAR(30) NOT NULL,
-    last_name VARCHAR(30) NOT NULL,
-    PRIMARY KEY (id)
-);

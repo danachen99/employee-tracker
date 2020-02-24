@@ -11,4 +11,8 @@ VALUES ("Lead Engineer", 90000, 1), ("Software Engineer", 85000, 1),
 
 -- Initial Employees
 INSERT INTO employee (first_name, last_name, role_id, manager_id)
-VALUES ("Emily","Rhodes", 2, 5),("Christina","Park", 3, NULL), ("Andy","Perkins", 2, NULL);
+VALUES ("Emily","Rhodes", 2, 2),
+("Christina","Park", 1, NULL), 
+("Andy","Perkins", 2, 2),
+("James","Farrugia",6, NULL),
+("Mike","Campbell",5,4);
