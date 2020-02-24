@@ -28,6 +28,13 @@ connection.connect((err) => {
 
 //populate all arrays with objects from the tables to be accessed later
 const init = () => {
+    //empties all arrays so that it doesn't push the same values each time function is called
+    employees = [];
+    departments = [];
+    roles = [];
+    employeeNames = [];
+    departmentNames = [];
+    roleTitles = [];
     connection.query("SELECT * FROM employee", (err, res) => {
         if (err) throw err;
         for (let i = 0; i < res.length; i++) {
