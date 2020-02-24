@@ -186,8 +186,9 @@ const addEmployee = () => {
                     if (err) throw err;
                     console.log(`Your employee has been added!`);
                 });
+                init();
             }
-            // init();
+
         });
 }
 
@@ -205,7 +206,9 @@ const addEmployeeWithManager = (res, roleID) => {
                 if (err) throw err;
                 console.log(`Your employee has been added!`);
             });
+            init();
         });
+
 }
 
 //add department
