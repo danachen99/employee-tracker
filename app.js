@@ -186,17 +186,11 @@ const addEmployee = () => {
             //         // default: null
             // }
         ]).then(res => {
-            // const query = "INSERT INTO employee (first_name, last_name, role_id) VALUES (?, ?, ?)";
-            // connection.query(query, [res.first_name, res.last_name, res.title], (err, res) => {
-            //     if (err) throw err;
-            //     console.log(`Your employee has been added! ${res.first_name} ${res.last_name} ${res.title}`);
-            //     // console.table(res);
-            // });
             const roleID = roleTitles.indexOf(res.title) + 1;
             console.log(roleID)
             connection.query(`INSERT INTO employee (first_name, last_name, role_id) VALUES ("${res.first_name}", "${res.last_name}", ${roleID})`, (err, res) => {
                 if (err) throw err;
-                console.log(`Your employee has been added! ${res.first_name} ${res.last_name} ${res.title}`);
+                console.log(`Your employee has been added!`);
                 // console.table(res);
             });
             init();
@@ -204,7 +198,19 @@ const addEmployee = () => {
 }
 
 const addDepartment = () => {
-
+    inquirer
+        .prompt({
+            type: "input",
+            name: "name",
+            message: "What is the name of the new department?"
+        }).then(res => {
+            const query = `INSERT INTO department (name) VALUES (?)`;
+            connection.query(query, [res.name], (err, res) => {
+                if (err) throw err;
+                console.log("Your new department has been sucessfully added!")
+            });
+            init();
+        });
 }
 
 
