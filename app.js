@@ -40,6 +40,7 @@ const init = () => {
         for (let i = 0; i < res.length; i++) {
             departments.push(res[i]);
         }
+        departments.forEach((department) => departmentNames.push(department.name));
     });
 
     connection.query("SELECT * FROM employee_role", (err, res) => {
@@ -213,6 +214,31 @@ const addDepartment = () => {
         });
 }
 
+const addRole = () => {
+    inquirer
+        .prompt([{
+            type: "rawlist",
+            name: "department",
+            message: "Which department would you like to add to?",
+            choices: departmentNames
+        }, {
+            type: "input",
+            name: "title",
+            message: "What is the title of the new role/position?"
+        }, {
+            type: "input",
+            name: "salary",
+            message: "What is the salary for this position?"
+        }]).then(res => {
+            const departmentID = departmentNames.indexOf(res.department) + 1;
+            const query = `INSERT INTO employee_role (title, salary, department_id) VALUES (?,?,?)`;
+            connection.query(query, [res.title, res.salary, departmentID], (err, res) => {
+                if (err) throw err;
+                console.log("The new position has been sucessfully added!")
+            });
+            init();
+        });
+}
 
 const updateRole = () => {
     inquirer.prompt({
