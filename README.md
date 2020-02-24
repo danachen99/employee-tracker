@@ -15,8 +15,8 @@ So that I can organize and plan my business
 JavaScript, Node.js (Inquirer & MySQL modules), MySQL
 
 ## Images
-![Employee Tracker 1](./images/img0)
+![Employee Tracker 1](./images/img0.png)
 
-![Employee Tracker 2](./images/img1)
+![Employee Tracker 2](./images/img1.png)
 
-![Employee Tracker 3](./images/img2)
+![Employee Tracker 3](./images/img2.png)
