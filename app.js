@@ -33,7 +33,6 @@ const init = () => {
         for (let i = 0; i < res.length; i++) {
             employees.push(res[i]);
         }
-        // console.log(employees);
         employees.forEach((employee) => employeeNames.push(employee.first_name));
     });
 
@@ -50,7 +49,6 @@ const init = () => {
         for (let i = 0; i < res.length; i++) {
             roles.push(res[i]);
         }
-        // roles.forEach((role) => console.log(`${role.title}`));
         roles.forEach((role) => roleTitles.push(role.title));
 
     });
