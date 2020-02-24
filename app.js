@@ -32,7 +32,7 @@ const init = () => {
             employees.push(res[i]);
         }
         // console.log(employees);
-
+        employees.forEach((employee) => employeeNames.push(employee.first_name));
     });
 
     connection.query("SELECT * FROM department", (err, res) => {
@@ -71,9 +71,6 @@ const runSearch = () => {
                 "Add Department",
                 "Add Role/Position",
                 "Update Employee Role",
-                "View All Employees By Manager",
-                "Remove Employee",
-                "Update Employee Manager"
             ]
         })
         .then((res) => {
@@ -90,9 +87,6 @@ const runSearch = () => {
                 case "View All Employees By Department":
                     viewByDepartment();
                     break;
-                case "View All Employees By Manager":
-                    viewByManager();
-                    break;
                 case "Add Employee":
                     addEmployee();
                     break;
@@ -102,14 +96,8 @@ const runSearch = () => {
                 case "Add Role/Position":
                     addRole();
                     break;
-                case "Remove Employee":
-                    removeEmployee();
-                    break;
                 case "Update Employee Role":
                     updateRole();
-                    break;
-                case "Update Employee Manager":
-                    updateManager();
                     break;
             }
         })
@@ -241,65 +229,23 @@ const addRole = () => {
 }
 
 const updateRole = () => {
-    inquirer.prompt({
+    inquirer.prompt([{
         type: "rawlist",
-        name: "id",
-        message: "Which employee's role would you like to update by ID?",
-        choices: employees
+        name: "name",
+        message: "Which employee's role would you like to update?",
+        choices: employeeNames
     }, {
         type: "rawlist",
-        name: "update",
+        name: "title",
         message: "What would you like to update their role to?",
-        choices: roles
-    }).then(res => {
-        let roleIndex;
-        switch (res.update) {
-            case "Sales Lead":
-                roleIndex = 0;
-                break;
-            case "Salesperson":
-                roleIndex = 1;
-                break;
-            case "Lead Engineer":
-                roleIndex = 2;
-                break;
-            case "Software Engineer":
-                roleIndex = 3;
-                break;
-            case "Account Manager":
-                roleIndex = 4;
-                break;
-            case "Accountant":
-                roleIndex = 5;
-                break;
-            case "Legal Team Lead":
-                roleIndex = 6;
-                break;
-        }
-        const query = "UPDATE employee SET ? WHERE ?;"
-        connection.query(query, [roleIndex, res.id], (err, res) => {
-            console.log(`The employee of ID ${res.id}'s role has been updated to ${res.update}`)
+        choices: roleTitles
+    }]).then(res => {
+        const roleID = roleTitles.indexOf(res.title) + 1;
+        const query = "UPDATE employee SET role_id = ? WHERE first_name = ?;"
+        connection.query(query, [roleID, res.name], (err, res) => {
+            if (err) throw err;
+            console.log(`The employee's role has been updated!`)
         });
-        runSearch();
+        init();
     });
-}
-
-//bonus
-const updateManager = () => {
-
-}
-
-//bonus
-const removeEmployee = () => {
-        inquirer.prompt({
-            type: "input",
-            name: "delete",
-            message: "Which employee would you like to remove?"
-        }).then(res => {
-
-        });
-    }
-    //bonus
-const viewByManager = () => {
-
 }
